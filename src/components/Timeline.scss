@@ -1,9 +1,9 @@
 .timeline {
 	font-family: 'PT Sans', sans-serif;
-	color: #333;
-	padding: 40px 20px;
-	max-width: 1200px;
-	margin: 0 auto;
+	margin: 0 8.25% 0 16.5%;
+	border: 1px solid #e2e5ec;
+	border-top: none;
+	border-bottom: none;
 
 	&__container {
 		display: flex;
@@ -11,14 +11,8 @@
 		align-items: center;
 	}
 
-	&__title {
-		font-size: 36px;
-		font-weight: 700;
-		margin-bottom: 60px;
-		text-align: center;
-	}
-
 	&__navigation {
+		width: 89%;
 		display: flex;
 		flex-direction: column;
 		align-items: center;
@@ -42,6 +36,7 @@
 
 		&__title {
 			font-size: 24px;
+
 			margin-bottom: 40px;
 		}
 	}

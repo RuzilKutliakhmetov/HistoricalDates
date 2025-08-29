@@ -4,7 +4,7 @@ import { timelineData } from './const/TimelineData'
 function App() {
 	return (
 		<div className='app'>
-			<Timeline periods={timelineData} title='История развития компании' />
+			<Timeline periods={timelineData} />
 		</div>
 	)
 }

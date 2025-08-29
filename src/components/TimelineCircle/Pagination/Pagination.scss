@@ -1,0 +1,107 @@
+.pagination {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: 12px;
+	margin-top: 20px;
+
+	// Счетчик пагинации
+	&__counter {
+		font-size: 16px;
+		font-weight: 600;
+		color: #005fa3;
+		min-width: 60px;
+		text-align: left;
+	}
+
+	// Контейнер кнопок
+	&__buttons {
+		display: flex;
+		gap: 12px;
+	}
+
+	// Кнопки навигации
+	&__button {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 40px;
+		height: 40px;
+		border: 1px solid #005fa3;
+		border-radius: 50%;
+		background: white;
+		color: #005fa3;
+		cursor: pointer;
+		transition: all 0.3s ease;
+
+		&:hover:not(.disabled) {
+			background: #005fa3;
+			color: white;
+			transform: translateY(-1px);
+		}
+
+		&.disabled {
+			opacity: 0.3;
+			cursor: not-allowed;
+
+			&:hover {
+				background: white;
+				color: #005fa3;
+				transform: none;
+			}
+		}
+
+		svg {
+			width: 16px;
+			height: 16px;
+			transition: transform 0.2s ease;
+		}
+
+		&:hover:not(.disabled) svg {
+			transform: scale(1.1);
+		}
+	}
+}
+
+// Адаптивность
+@media (max-width: 768px) {
+	.pagination {
+		gap: 10px;
+
+		&__counter {
+			font-size: 14px;
+		}
+
+		&__buttons {
+			gap: 10px;
+		}
+
+		&__button {
+			width: 35px;
+			height: 35px;
+
+			svg {
+				width: 14px;
+				height: 14px;
+			}
+		}
+	}
+}
+
+@media (max-width: 480px) {
+	.pagination {
+		&__counter {
+			font-size: 13px;
+		}
+
+		&__button {
+			width: 32px;
+			height: 32px;
+
+			svg {
+				width: 12px;
+				height: 12px;
+			}
+		}
+	}
+}

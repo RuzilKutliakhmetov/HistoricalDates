@@ -1,7 +1,9 @@
 import { gsap } from 'gsap'
 import React, { useEffect, useRef } from 'react'
-
 import { TimelinePeriod } from '../../types/timelines'
+
+import { TimelineYears } from '../TimelineYears/TimelineYears'
+import { Pagination } from './Pagination/Pagination'
 import './TimelineCircle.scss'
 
 interface TimelineCircleProps {
@@ -18,6 +20,7 @@ export const TimelineCircle: React.FC<TimelineCircleProps> = ({
 	const pointsContainerRef = useRef<HTMLDivElement>(null)
 	const pointRefs = useRef<(HTMLButtonElement | null)[]>([])
 	const labelRef = useRef<HTMLDivElement>(null)
+	const yearsRef = useRef<HTMLDivElement>(null)
 
 	// Инициализируем массив refs
 	useEffect(() => {
@@ -33,15 +36,17 @@ export const TimelineCircle: React.FC<TimelineCircleProps> = ({
 		return rotation
 	}
 
-	// Циклическая навигация
+	// Навигация с ограничениями (без цикличности)
 	const handleNext = () => {
-		const nextIndex = (activePeriod + 1) % periods.length
-		onPeriodChange(nextIndex)
+		if (activePeriod < periods.length - 1) {
+			onPeriodChange(activePeriod + 1)
+		}
 	}
 
 	const handlePrev = () => {
-		const prevIndex = (activePeriod - 1 + periods.length) % periods.length
-		onPeriodChange(prevIndex)
+		if (activePeriod > 0) {
+			onPeriodChange(activePeriod - 1)
+		}
 	}
 
 	useEffect(() => {
@@ -63,6 +68,15 @@ export const TimelineCircle: React.FC<TimelineCircleProps> = ({
 			)
 		}
 
+		// Анимация чисел годов
+		if (yearsRef.current) {
+			gsap.fromTo(
+				yearsRef.current.children,
+				{ opacity: 0, y: 10 },
+				{ opacity: 1, y: 0, duration: 0.3, stagger: 0.1, ease: 'power2.out' }
+			)
+		}
+
 		// Анимация вращения текста в противоположную сторону
 		pointRefs.current.forEach(point => {
 			if (point) {
@@ -81,6 +95,19 @@ export const TimelineCircle: React.FC<TimelineCircleProps> = ({
 
 	return (
 		<div className='timeline-circle'>
+			<div className='timeline-circle__left'>
+				<div className='timeline-circle__title'>Исторические даты</div>
+				{/* Пагинация - вынесена в отдельный компонент */}
+				<Pagination
+					current={activePeriod + 1}
+					total={periods.length}
+					onNext={handleNext}
+					onPrev={handlePrev}
+					isFirst={activePeriod === 0}
+					isLast={activePeriod === periods.length - 1}
+				/>
+			</div>
+
 			{/* Контейнер круга и точек */}
 			<div className='timeline-circle__container'>
 				<svg className='timeline-circle__svg' viewBox='0 0 100 100'>
@@ -92,6 +119,15 @@ export const TimelineCircle: React.FC<TimelineCircleProps> = ({
 						r='45'
 					/>
 				</svg>
+
+				{/* Блок с годами в центре круга */}
+				<div className='timeline-circle__years'>
+					<TimelineYears
+						periods={periods}
+						activePeriod={activePeriod}
+						ref={yearsRef}
+					/>
+				</div>
 
 				{/* Контейнер точек с вращением */}
 				<div
@@ -134,43 +170,6 @@ export const TimelineCircle: React.FC<TimelineCircleProps> = ({
 				<div ref={labelRef} className='timeline-circle__label'>
 					{periods[activePeriod]?.name}
 				</div>
-			</div>
-
-			{/* Кнопки навигации - ниже круга и слева */}
-			<div className='timeline-circle__navigation'>
-				<button
-					className='timeline-circle__nav-btn timeline-circle__prev'
-					onClick={handlePrev}
-				>
-					<svg width='16' height='16' viewBox='0 0 24 24' fill='none'>
-						<path
-							d='M15 18L9 12L15 6'
-							stroke='currentColor'
-							strokeWidth='2'
-							strokeLinecap='round'
-							strokeLinejoin='round'
-						/>
-					</svg>
-				</button>
-
-				<div className='timeline-circle__current'>
-					{activePeriod + 1} / {periods.length}
-				</div>
-
-				<button
-					className='timeline-circle__nav-btn timeline-circle__next'
-					onClick={handleNext}
-				>
-					<svg width='16' height='16' viewBox='0 0 24 24' fill='none'>
-						<path
-							d='M9 18L15 12L9 6'
-							stroke='currentColor'
-							strokeWidth='2'
-							strokeLinecap='round'
-							strokeLinejoin='round'
-						/>
-					</svg>
-				</button>
 			</div>
 		</div>
 	)

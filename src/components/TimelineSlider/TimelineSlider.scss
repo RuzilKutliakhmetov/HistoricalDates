@@ -1,45 +1,49 @@
 .timeline-slider {
-	width: 100%;
 	position: relative;
 	display: flex;
 	align-items: center;
-	gap: 15px;
+	width: 100%;
+	max-width: 1200px;
+	margin: 0 auto;
+	padding: 0 60px; // Отступы для кнопок навигации
 
+	// Контейнер Swiper
 	.swiper {
-		width: calc(100% - 110px); // Учитываем место для кнопок
-		flex: 1;
+		width: 100%;
 	}
 
+	// Слайды
 	.swiper-slide {
 		height: auto;
 	}
 
-	// Кнопки по бокам
+	// Кнопки навигации
 	&__prev,
 	&__next {
+		position: absolute;
+		top: 50%;
+		transform: translateY(-50%);
 		width: 40px;
 		height: 40px;
-		border: 1px solid #005fa3;
+		border: 1px solid #42567a;
 		border-radius: 50%;
 		background: white;
-		color: #005fa3;
-		cursor: pointer;
 		display: flex;
 		align-items: center;
 		justify-content: center;
+		cursor: pointer;
 		transition: all 0.3s ease;
-		flex-shrink: 0;
+		z-index: 10;
 
 		&:hover:not(.disabled) {
-			background: #005fa3;
+			background: #42567a;
 			color: white;
 		}
 
-		// Неактивные кнопки
 		&.disabled {
-			opacity: 0;
-			visibility: hidden;
-			cursor: default;
+			opacity: 0.3;
+			cursor: not-allowed;
+			border-color: #ccc;
 		}
 
 		svg {
@@ -47,46 +51,151 @@
 			height: 20px;
 		}
 	}
-}
 
-// Адаптивность для бокового расположения
-@media (max-width: 768px) {
-	.timeline-slider {
-		gap: 10px;
+	&__prev {
+		left: 0;
+	}
 
-		.swiper {
-			width: calc(100% - 90px);
+	&__next {
+		right: 0;
+	}
+
+	// Стили для события
+	.timeline-event {
+		padding: 24px;
+		height: 100%;
+		display: flex;
+		flex-direction: column;
+		transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+		&__year {
+			font-size: 25px;
+			line-height: 1.2;
+			font-weight: 600;
+			color: #3877ee;
+			margin-bottom: 15px;
 		}
+
+		&__description {
+			font-size: 20px;
+			color: #42567a;
+			line-height: 30px;
+			flex-grow: 1;
+		}
+	}
+
+	// Адаптивность
+	@media (max-width: 1024px) {
+		padding: 0 50px;
+
+		.timeline-event {
+			padding: 20px;
+
+			&__description {
+				font-size: 13px;
+			}
+		}
+	}
+
+	@media (max-width: 768px) {
+		padding: 0 40px;
 
 		&__prev,
 		&__next {
-			width: 35px;
-			height: 35px;
+			width: 36px;
+			height: 36px;
+
+			svg {
+				width: 18px;
+				height: 18px;
+			}
+		}
+
+		.swiper {
+			padding: 15px 5px;
+		}
+
+		.timeline-event {
+			padding: 16px;
+
+			&__year {
+				font-size: 13px;
+				margin-bottom: 8px;
+			}
+
+			&__description {
+				font-size: 12px;
+			}
+		}
+	}
+
+	@media (max-width: 640px) {
+		padding: 0 35px;
+
+		&__prev,
+		&__next {
+			width: 32px;
+			height: 32px;
 
 			svg {
 				width: 16px;
 				height: 16px;
 			}
 		}
-	}
-}
-
-@media (max-width: 480px) {
-	.timeline-slider {
-		gap: 8px;
 
 		.swiper {
-			width: calc(100% - 76px);
+			padding: 10px 0;
 		}
+
+		.timeline-event {
+			padding: 14px;
+
+			&__year {
+				font-size: 12px;
+			}
+
+			&__description {
+				font-size: 11px;
+			}
+		}
+	}
+
+	@media (max-width: 480px) {
+		padding: 0 30px;
 
 		&__prev,
 		&__next {
-			width: 32px;
-			height: 32px;
+			width: 28px;
+			height: 28px;
+			top: 40%;
+
+			svg {
+				width: 14px;
+				height: 14px;
+			}
+		}
+
+		.timeline-event {
+			padding: 12px;
+
+			&__year {
+				font-size: 11px;
+				margin-bottom: 6px;
+			}
+
+			&__description {
+				font-size: 10px;
+			}
 		}
 	}
+}
 
-	.timeline-event {
-		padding: 15px;
-	}
+// Дополнительные стили для Swiper
+.swiper-wrapper {
+	display: flex;
+	align-items: stretch;
+}
+
+.swiper-slide {
+	height: auto;
 }

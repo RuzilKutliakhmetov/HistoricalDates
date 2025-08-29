@@ -1,21 +1,18 @@
 import React from 'react'
 import { TimelineCircle } from './TimelineCircle/TimelineCircle'
-import { TimelineContent } from './TimelineContent/TimelineContent'
+
 import { TimelineYears } from './TimelineYears/TimelineYears'
 
 import { useTimeline } from '../hooks/useTimeline'
 import { TimelinePeriod } from '../types/timelines'
 import './Timeline.scss'
+import { TimelineSlider } from './TimelineSlider/TimelineSlider'
 
 interface TimelineProps {
 	periods: TimelinePeriod[]
-	title?: string
 }
 
-export const Timeline: React.FC<TimelineProps> = ({
-	periods,
-	title = 'Исторические даты',
-}) => {
+export const Timeline: React.FC<TimelineProps> = ({ periods }) => {
 	const { activePeriod, handlePeriodChange } = useTimeline(periods)
 
 	if (periods.length < 2 || periods.length > 6) {
@@ -26,8 +23,6 @@ export const Timeline: React.FC<TimelineProps> = ({
 	return (
 		<div className='timeline'>
 			<div className='timeline__container'>
-				<h2 className='timeline__title'>{title}</h2>
-
 				<div className='timeline__navigation'>
 					<TimelineCircle
 						periods={periods}
@@ -37,7 +32,7 @@ export const Timeline: React.FC<TimelineProps> = ({
 					<TimelineYears periods={periods} activePeriod={activePeriod} />
 				</div>
 
-				<TimelineContent periods={periods} activePeriod={activePeriod} />
+				<TimelineSlider periods={periods} activePeriod={activePeriod} />
 			</div>
 		</div>
 	)

@@ -1,0 +1,39 @@
+// PT Sans Regular
+@font-face {
+	font-family: 'PT Sans';
+	font-style: normal;
+	font-weight: 400;
+	src: url('../fonts/pt-sans/pt-sans-regular.ttf') format('ttf'),
+		url('../fonts/pt-sans/pt-sans-regular.ttf') format('ttf');
+	font-display: swap;
+}
+
+// PT Sans Italic
+@font-face {
+	font-family: 'PT Sans';
+	font-style: italic;
+	font-weight: 400;
+	src: url('../fonts/pt-sans/pt-sans-italic.ttf') format('ttf'),
+		url('../fonts/pt-sans/pt-sans-italic.ttf') format('ttf');
+	font-display: swap;
+}
+
+// PT Sans Bold
+@font-face {
+	font-family: 'PT Sans';
+	font-style: normal;
+	font-weight: 700;
+	src: url('../fonts/pt-sans/pt-sans-bold.ttf') format('ttf'),
+		url('../fonts/pt-sans/pt-sans-bold.ttf') format('ttf');
+	font-display: swap;
+}
+
+// PT Sans Bold Italic
+@font-face {
+	font-family: 'PT Sans';
+	font-style: italic;
+	font-weight: 700;
+	src: url('../fonts/pt-sans/pt-sans-bold-italic.ttf') format('ttf'),
+		url('../fonts/pt-sans/pt-sans-bold-italic.ttf') format('ttf');
+	font-display: swap;
+}

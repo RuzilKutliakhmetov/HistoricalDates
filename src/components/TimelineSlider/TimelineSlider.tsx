@@ -8,13 +8,17 @@ import './TimelineSlider.scss'
 import 'swiper/css'
 import 'swiper/css/navigation'
 import { Navigation } from 'swiper/modules'
-import { TimelineEvent } from '../../types/timelines'
+import { TimelinePeriod } from '../../types/timelines'
 
 interface TimelineSliderProps {
-	events: TimelineEvent[]
+	periods: TimelinePeriod[]
+	activePeriod?: number
 }
-
-export const TimelineSlider: React.FC<TimelineSliderProps> = ({ events }) => {
+export const TimelineSlider: React.FC<TimelineSliderProps> = ({
+	periods,
+	activePeriod = 0,
+}) => {
+	const activePeriodData = periods[activePeriod]
 	const swiperRef = useRef<SwiperType | null>(null)
 	const [isBeginning, setIsBeginning] = useState(true)
 	const [isEnd, setIsEnd] = useState(false)
@@ -24,7 +28,7 @@ export const TimelineSlider: React.FC<TimelineSliderProps> = ({ events }) => {
 			setIsBeginning(swiperRef.current.isBeginning)
 			setIsEnd(swiperRef.current.isEnd)
 		}
-	}, [events])
+	}, [activePeriodData.events])
 
 	const handleSwiperInit = (swiper: SwiperType) => {
 		swiperRef.current = swiper
@@ -85,11 +89,10 @@ export const TimelineSlider: React.FC<TimelineSliderProps> = ({ events }) => {
 					},
 				}}
 			>
-				{events.map(event => (
+				{activePeriodData.events.map(event => (
 					<SwiperSlide key={event.id}>
 						<div className='timeline-event'>
 							<div className='timeline-event__year'>{event.year}</div>
-							<div className='timeline-event__title'>{event.title}</div>
 							<div className='timeline-event__description'>
 								{event.description}
 							</div>
