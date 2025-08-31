@@ -55,22 +55,23 @@ export const TimelineSlider: React.FC<TimelineSliderProps> = ({
 
 	return (
 		<div className='timeline-slider'>
-			<button
-				className={`timeline-slider__prev ${isBeginning ? 'disabled' : ''}`}
-				onClick={goPrev}
-				disabled={isBeginning}
-			>
-				<svg width='24' height='24' viewBox='0 0 24 24' fill='none'>
-					<path
-						d='M15 18L9 12L15 6'
-						stroke='currentColor'
-						strokeWidth='2'
-						strokeLinecap='round'
-						strokeLinejoin='round'
-					/>
-				</svg>
-			</button>
-
+			<div className='timeline-slider__button'>
+				<button
+					className={`timeline-slider__prev ${isBeginning ? 'disabled' : ''}`}
+					onClick={goPrev}
+					disabled={isBeginning}
+				>
+					<svg width='24' height='24' viewBox='0 0 24 24' fill='none'>
+						<path
+							d='M15 18L9 12L15 6'
+							stroke='currentColor'
+							strokeWidth='2'
+							strokeLinecap='round'
+							strokeLinejoin='round'
+						/>
+					</svg>
+				</button>
+			</div>
 			<Swiper
 				modules={[Navigation]}
 				spaceBetween={30}
@@ -100,22 +101,24 @@ export const TimelineSlider: React.FC<TimelineSliderProps> = ({
 					</SwiperSlide>
 				))}
 			</Swiper>
+			<div className='timeline-slider__button'>
+				<button
+					className={`timeline-slider__next ${isEnd ? 'disabled' : ''}`}
+					onClick={goNext}
+					disabled={isEnd}
+				>
+					<svg width='24' height='24' viewBox='0 0 24 24' fill='none'>
+						<path
+							d='M9 18L15 12L9 6'
+							stroke='currentColor'
+							strokeWidth='2'
+							strokeLinecap='round'
+							strokeLinejoin='round'
+						/>
+					</svg>
+				</button>
+			</div>
 
-			<button
-				className={`timeline-slider__next ${isEnd ? 'disabled' : ''}`}
-				onClick={goNext}
-				disabled={isEnd}
-			>
-				<svg width='24' height='24' viewBox='0 0 24 24' fill='none'>
-					<path
-						d='M9 18L15 12L9 6'
-						stroke='currentColor'
-						strokeWidth='2'
-						strokeLinecap='round'
-						strokeLinejoin='round'
-					/>
-				</svg>
-			</button>
 		</div>
 	)
 }

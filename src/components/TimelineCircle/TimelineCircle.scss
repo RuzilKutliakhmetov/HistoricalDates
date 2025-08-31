@@ -1,23 +1,23 @@
 .timeline-circle {
 	position: relative;
 	width: 100%;
-	height: 650px;
+	height: 620px;
 	display: flex;
-	flex-direction: row;
-	align-items: flex-start;
-	margin-top: 170px;
+	margin-top: 8.8%;
 	margin-bottom: 30px;
-	min-height: 600px; // Минимальная высота для родителя
+	min-height: 600px;
+	gap: 1.4%;
 
 	&__left {
-		height: 100%; // Занимает всю высоту родителя
+		height: 100%;
 		display: flex;
 		flex-direction: column;
-		justify-content: space-between; // Распределяет элементы по вертикали
+		justify-content: space-between;
 	}
 
 	&__title {
 		width: 353px;
+		line-height: 120%;
 		font-size: 56px;
 		font-weight: 700;
 		text-align: left;
@@ -25,7 +25,10 @@
 		color: #42567a;
 	}
 
-	// Контейнер круга
+	&__right {
+		margin-top: 5%;
+	}
+
 	&__container {
 		position: relative;
 		width: 530px;
@@ -47,26 +50,20 @@
 		stroke-width: 0.1px;
 	}
 
-	// Контейнер для годов в центре круга
 	&__years {
-		position: absolute;
-		top: 0;
-		left: 0;
 		width: 100%;
 		height: 100%;
 		display: flex;
 		align-items: center;
 		justify-content: center;
 		z-index: 4;
-
-		// Убираем все стили фона, которые были раньше
 		background: none;
 		border-radius: 0;
 		padding: 0;
 		box-shadow: none;
 		min-width: auto;
 	}
-	// Контейнер точек с вращением
+
 	&__points {
 		position: absolute;
 		top: 0;
@@ -83,6 +80,7 @@
 		position: absolute;
 		border-radius: 50%;
 		background: #42567a;
+		// Объединяем все трансформации в одном свойстве
 		transform: translate(-50%, -50%);
 		cursor: pointer;
 		display: flex;
@@ -92,14 +90,60 @@
 		z-index: 2;
 		will-change: transform;
 		transform-style: preserve-3d;
+		border: none;
+		padding: 0;
+
+		// Цифра (изначально скрыта для неактивных точек)
+		.timeline-circle__index {
+			display: none;
+			font-size: 18px;
+			font-weight: 700;
+			color: #42567a;
+			// Центрирование текста - объединяем трансформации
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			transform: translate(-50%, -50%);
+			line-height: 1;
+		}
+
+		// Точка (всегда видна для неактивных точек)
+		.timeline-circle__dot {
+			display: block;
+			width: 6px;
+			height: 6px;
+			border-radius: 50%;
+			background: #42567a;
+			transition: all 0.3s ease;
+			// Центрирование точки - объединяем трансформации
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			transform: translate(-50%, -50%);
+		}
 
 		// Неактивные точки (маленькие)
 		&:not(.active) {
-			border: none;
+			width: 6px;
+			height: 6px;
 
+			// Стили при наведении на неактивную точку
 			&:hover {
-				background: #999;
-				transform: translate(-50%, -50%) scale(1.2);
+				background: #f4f5f9 !important;
+				border: 1px solid #929aa9 !important;
+				width: 40px !important;
+				height: 40px !important;
+				z-index: 4 !important;
+
+				// Показываем цифру при наведении
+				.timeline-circle__index {
+					display: block !important;
+				}
+
+				// Скрываем точку при наведении
+				.timeline-circle__dot {
+					display: none !important;
+				}
 			}
 		}
 
@@ -110,38 +154,31 @@
 			background: #f4f5f9;
 			color: #42567a;
 			border: 1px solid #929aa9;
-			transform: translate(-50%, -50%) scale(1.1);
+			// // Объединяем scale с translate
 			z-index: 3;
 
+			// Показываем цифру в активной точке
+			.timeline-circle__index {
+				display: block;
+			}
+
+			// Скрываем точку в активной точке
+			.timeline-circle__dot {
+				display: none;
+			}
+
 			&:hover {
+				// Объединяем scale с translate
 				transform: translate(-50%, -50%) scale(1.15);
 			}
 		}
 	}
 
-	// Точка для неактивных элементов
-	&__dot {
-		display: block;
-		width: 6px;
-		height: 6px;
-		border-radius: 50%;
-		border: none;
-	}
-
-	// Цифра для активного элемента
-	&__index {
-		font-size: 18px;
-		font-weight: 700;
-		display: block;
-		transform: rotate(0deg);
-		backface-visibility: hidden;
-	}
-
 	// Название активного периода фиксировано справа от круга
 	&__label {
 		position: absolute;
-		left: calc(72% + 20px);
-		top: 11%;
+		left: calc(73% + 20px);
+		top: 7%;
 		transform: translateY(-50%);
 		padding: 12px 20px;
 		font-size: 20px;
@@ -175,12 +212,12 @@
 
 		&__left {
 			width: 100%;
-			height: auto; // На мобильных отключаем полную высоту
+			height: auto;
 			margin-right: 0;
 			margin-bottom: 30px;
 			justify-content: center;
 			padding: 0;
-			border: none; // Убираем обводку на мобильных
+			border: none;
 		}
 
 		&__title {
@@ -190,7 +227,26 @@
 		&__container {
 			width: 250px;
 			height: 250px;
-			border: none; // Убираем обводку на мобильных
+			border: none;
+		}
+
+		// Адаптация hover-эффектов для мобильных устройств
+		&__point:not(.active):hover {
+			width: 30px !important;
+			height: 30px !important;
+
+			.timeline-circle__index {
+				font-size: 14px !important;
+			}
+		}
+
+		&__point.active {
+			width: 30px;
+			height: 30px;
+
+			.timeline-circle__index {
+				font-size: 14px;
+			}
 		}
 	}
 }
@@ -212,6 +268,24 @@
 		&__container {
 			width: 200px;
 			height: 200px;
+		}
+
+		&__point:not(.active):hover {
+			width: 25px !important;
+			height: 25px !important;
+
+			.timeline-circle__index {
+				font-size: 12px !important;
+			}
+		}
+
+		&__point.active {
+			width: 25px;
+			height: 25px;
+
+			.timeline-circle__index {
+				font-size: 12px;
+			}
 		}
 	}
 }

@@ -107,68 +107,66 @@ export const TimelineCircle: React.FC<TimelineCircleProps> = ({
 					isLast={activePeriod === periods.length - 1}
 				/>
 			</div>
+			<div className='timeline-circle__right'>
+				<div className='timeline-circle__container'>
+					<svg className='timeline-circle__svg' viewBox='0 0 100 100'>
+						{/* Фон круга */}
+						<circle
+							className='timeline-circle__background'
+							cx='50'
+							cy='50'
+							r='50'
+						/>
 
-			{/* Контейнер круга и точек */}
-			<div className='timeline-circle__container'>
-				<svg className='timeline-circle__svg' viewBox='0 0 100 100'>
-					{/* Фон круга */}
-					<circle
-						className='timeline-circle__background'
-						cx='50'
-						cy='50'
-						r='45'
-					/>
-				</svg>
+					</svg>
 
-				{/* Блок с годами в центре круга */}
-				<div className='timeline-circle__years'>
-					<TimelineYears
-						periods={periods}
-						activePeriod={activePeriod}
-						ref={yearsRef}
-					/>
-				</div>
+					{/* Блок с годами в центре круга */}
+					<div className='timeline-circle__years'>
+						<TimelineYears
+							periods={periods}
+							activePeriod={activePeriod}
+							ref={yearsRef}
+						/>
+					</div>
 
-				{/* Контейнер точек с вращением */}
-				<div
-					ref={pointsContainerRef}
-					className='timeline-circle__points'
-					style={{ transform: `rotate(${calculateRotation(activePeriod)}deg)` }}
-				>
-					{periods.map((period, index) => {
-						const angle = (index * 360) / periods.length
-						const radian = (angle * Math.PI) / 180
-						const x = 50 + 45 * Math.sin(radian)
-						const y = 50 - 45 * Math.cos(radian)
+					{/* Контейнер точек с вращением */}
+					<div
+						ref={pointsContainerRef}
+						className='timeline-circle__points'
+						style={{ transform: `rotate(${calculateRotation(activePeriod)}deg)` }}
+					>
+						{periods.map((period, index) => {
+							const angle = (index * 360) / periods.length
+							const radian = (angle * Math.PI) / 180
+							const x = 50 + 50 * Math.sin(radian)
+							const y = 50 - 50 * Math.cos(radian)
 
-						return (
-							<button
-								key={period.id}
-								ref={el => {
-									pointRefs.current[index] = el
-								}}
-								className={`timeline-circle__point ${
-									index === activePeriod ? 'active' : ''
-								}`}
-								style={{
-									left: `${x}%`,
-									top: `${y}%`,
-								}}
-								onClick={() => handlePeriodClick(index)}
-							>
-								{index === activePeriod ? (
-									<span className='timeline-circle__index'>{index + 1}</span>
-								) : (
+							return (
+								<button
+									key={period.id}
+									ref={el => {
+										pointRefs.current[index] = el
+									}}
+									className={`timeline-circle__point ${index === activePeriod ? 'active' : ''
+										}`}
+									style={{
+										left: `${x}%`,
+										top: `${y}%`,
+									}}
+									onClick={() => handlePeriodClick(index)}
+								>
+									{/* Всегда отображаем и dot и index, CSS управляет видимостью */}
 									<span className='timeline-circle__dot'></span>
-								)}
-							</button>
-						)
-					})}
-				</div>
+									<span className='timeline-circle__index'>{index + 1}</span>
+								</button>
+							)
+						})}
+					</div>
 
-				{/* Название активного периода фиксировано справа от круга */}
-				<div ref={labelRef} className='timeline-circle__label'>
-					{periods[activePeriod]?.name}
+					{/* Название активного периода фиксировано справа от круга */}
+					<div ref={labelRef} className='timeline-circle__label'>
+						{periods[activePeriod]?.name}
+					</div>
 				</div>
 			</div>
 		</div>

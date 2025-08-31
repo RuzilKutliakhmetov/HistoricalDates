@@ -3,13 +3,13 @@
 	display: flex;
 	align-items: center;
 	width: 100%;
-	max-width: 1200px;
+
 	margin: 0 auto;
-	padding: 0 60px; // Отступы для кнопок навигации
+	// padding: 0 60px; // Отступы для кнопок навигации
 
 	// Контейнер Swiper
 	.swiper {
-		width: 100%;
+		width: 89%;
 	}
 
 	// Слайды
@@ -17,17 +17,25 @@
 		height: auto;
 	}
 
+	&__button {
+		width: 5%;
+		display: flex;
+		justify-content: center;
+	}
+
 	// Кнопки навигации
 	&__prev,
 	&__next {
-		position: absolute;
-		top: 50%;
+		// position: absolute;
+		// top: 50%;
 		transform: translateY(-50%);
 		width: 40px;
 		height: 40px;
-		border: 1px solid #42567a;
+		box-shadow: 0 4px 4px rgba(0, 0, 0, 0.1);
+		border: none;
 		border-radius: 50%;
 		background: white;
+		color: #3877EE;
 		display: flex;
 		align-items: center;
 		justify-content: center;
@@ -35,14 +43,9 @@
 		transition: all 0.3s ease;
 		z-index: 10;
 
-		&:hover:not(.disabled) {
-			background: #42567a;
-			color: white;
-		}
-
 		&.disabled {
-			opacity: 0.3;
-			cursor: not-allowed;
+			opacity: 0.0;
+			cursor: auto;
 			border-color: #ccc;
 		}
 
