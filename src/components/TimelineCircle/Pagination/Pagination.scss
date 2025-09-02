@@ -4,37 +4,64 @@
 	align-items: flex-start;
 	gap: 20px;
 
-
-	// Счетчик пагинации
-	&__counter {
-		font-size: 14px;
-		// font-weight: 600;
-		color: #42567A;
-		text-align: left;
+	@media (max-width: 1024px) {
+		align-items: center;
+		gap: 15px;
 	}
 
-	// Контейнер кнопок
-	&__buttons {
-		display: flex;
+	@media (max-width: 768px) {
 		gap: 12px;
 	}
 
-	// Кнопки навигации
+	&__counter {
+		font-size: 14px;
+		color: #42567a;
+		text-align: left;
+
+		@media (max-width: 1024px) {
+			text-align: center;
+			font-size: 13px;
+		}
+
+		@media (max-width: 480px) {
+			font-size: 12px;
+		}
+	}
+
+	&__buttons {
+		display: flex;
+		gap: 12px;
+
+		@media (max-width: 480px) {
+			gap: 8px;
+		}
+	}
+
 	&__button {
 		display: flex;
 		align-items: center;
 		justify-content: center;
 		width: 50px;
 		height: 50px;
-		border: 1px solid #9BA6BA;
+		border: 1px solid #9ba6ba;
 		border-radius: 50%;
 		background: white;
-		color: #9BA6BA;
+		color: #9ba6ba;
 		cursor: pointer;
 		transition: all 0.3s ease;
 
+		@media (max-width: 768px) {
+			width: 45px;
+			height: 45px;
+		}
+
+		@media (max-width: 480px) {
+			width: 40px;
+			height: 40px;
+		}
+
 		&:hover:not(.disabled) {
-			background: #9BA6BA;
+			background: #9ba6ba;
 			color: white;
 			transform: translateY(-1px);
 		}
@@ -54,53 +81,15 @@
 			width: 16px;
 			height: 16px;
 			transition: transform 0.2s ease;
-		}
 
-		&:hover:not(.disabled) svg {
-			transform: scale(1.1);
-		}
-	}
-}
-
-// Адаптивность
-@media (max-width: 768px) {
-	.pagination {
-		gap: 10px;
-
-		&__counter {
-			font-size: 14px;
-		}
-
-		&__buttons {
-			gap: 10px;
-		}
-
-		&__button {
-			width: 35px;
-			height: 35px;
-
-			svg {
+			@media (max-width: 480px) {
 				width: 14px;
 				height: 14px;
 			}
 		}
-	}
-}
 
-@media (max-width: 480px) {
-	.pagination {
-		&__counter {
-			font-size: 13px;
-		}
-
-		&__button {
-			width: 32px;
-			height: 32px;
-
-			svg {
-				width: 12px;
-				height: 12px;
-			}
+		&:hover:not(.disabled) svg {
+			transform: scale(1.1);
 		}
 	}
 }

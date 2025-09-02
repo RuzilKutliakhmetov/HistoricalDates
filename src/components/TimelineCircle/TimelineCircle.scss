@@ -8,11 +8,58 @@
 	min-height: 600px;
 	gap: 1.4%;
 
+	@media (max-width: 1440px) {
+		height: 560px;
+		min-height: 560px;
+		margin-top: 9%;
+	}
+
+	@media (max-width: 1024px) {
+		height: 500px;
+		min-height: 500px;
+		margin-top: 8%;
+		gap: 2%;
+	}
+
+	&--mobile {
+		@media (max-width: 768px) {
+			height: 50vh;
+			min-height: 50vh;
+			margin: 0;
+			flex-direction: column;
+			gap: 0;
+			justify-content: flex-start;
+		}
+	}
+
+	&__mobile-header {
+		display: none;
+
+		@media (max-width: 768px) {
+			display: block;
+			padding: 20px 16px 0;
+			text-align: center;
+		}
+
+		@media (max-width: 480px) {
+			padding: 15px 12px 0;
+		}
+	}
+
 	&__left {
 		height: 100%;
 		display: flex;
 		flex-direction: column;
 		justify-content: space-between;
+
+		@media (max-width: 1024px) {
+			width: 100%;
+			height: auto;
+		}
+
+		@media (max-width: 768px) {
+			display: none;
+		}
 	}
 
 	&__title {
@@ -23,11 +70,46 @@
 		text-align: left;
 		margin: 0;
 		color: #42567a;
+
+		@media (max-width: 1440px) {
+			width: 300px;
+			font-size: 3.2vw;
+		}
+
+		@media (max-width: 1024px) {
+			width: 100%;
+			font-size: 32px;
+			text-align: center;
+			margin-bottom: 20px;
+		}
+
+		@media (max-width: 768px) {
+			font-size: 28px;
+			width: auto;
+			text-align: center;
+			margin-bottom: 0;
+		}
+
+		@media (max-width: 480px) {
+			font-size: 24px;
+		}
 	}
 
 	&__right {
 		display: flex;
 		align-items: center;
+
+		@media (max-width: 1024px) {
+			width: 100%;
+			justify-content: center;
+		}
+
+		@media (max-width: 768px) {
+			height: 50%;
+			align-items: flex-end;
+			justify-content: center;
+			padding-bottom: 20px;
+		}
 	}
 
 	&__container {
@@ -35,6 +117,30 @@
 		width: 28.5vw;
 		height: 28.5vw;
 		flex-shrink: 0;
+		max-width: 500px;
+		max-height: 500px;
+
+		@media (max-width: 1440px) {
+			width: 32vw;
+			height: 32vw;
+		}
+
+		@media (max-width: 1024px) {
+			width: 40vw;
+			height: 40vw;
+		}
+
+		&--mobile {
+			@media (max-width: 768px) {
+				width: 100%;
+				height: auto;
+				max-width: none;
+				max-height: none;
+				display: flex;
+				justify-content: center;
+				align-items: flex-end;
+			}
+		}
 	}
 
 	&__svg {
@@ -43,6 +149,10 @@
 		position: absolute;
 		top: 0;
 		left: 0;
+
+		@media (max-width: 768px) {
+			display: none;
+		}
 	}
 
 	&__background {
@@ -63,6 +173,12 @@
 		padding: 0;
 		box-shadow: none;
 		min-width: auto;
+
+		@media (max-width: 768px) {
+			height: auto;
+			width: 100%;
+			padding: 0 20px;
+		}
 	}
 
 	&__points {
@@ -75,13 +191,16 @@
 		transform-origin: center center;
 		will-change: transform;
 		z-index: 3;
+
+		@media (max-width: 768px) {
+			display: none;
+		}
 	}
 
 	&__point {
 		position: absolute;
 		border-radius: 50%;
 		background: #42567a;
-		// Объединяем все трансформации в одном свойстве
 		transform: translate(-50%, -50%);
 		cursor: pointer;
 		display: flex;
@@ -94,21 +213,43 @@
 		border: none;
 		padding: 0;
 
-		// Цифра (изначально скрыта для неактивных точек)
+		@media (max-width: 480px) {
+			&:not(.active) {
+				width: 5px !important;
+				height: 5px !important;
+
+				&:hover {
+					width: 35px !important;
+					height: 35px !important;
+				}
+			}
+
+			&.active {
+				width: 35px !important;
+				height: 35px !important;
+			}
+		}
+
+		@media (max-width: 768px) {
+			display: none;
+		}
+
 		.timeline-circle__index {
 			display: none;
 			font-size: 18px;
 			font-weight: 700;
 			color: #42567a;
-			// Центрирование текста - объединяем трансформации
 			position: absolute;
 			top: 50%;
 			left: 50%;
 			transform: translate(-50%, -50%);
 			line-height: 1;
+
+			@media (max-width: 480px) {
+				font-size: 16px;
+			}
 		}
 
-		// Точка (всегда видна для неактивных точек)
 		.timeline-circle__dot {
 			display: block;
 			width: 6px;
@@ -116,19 +257,21 @@
 			border-radius: 50%;
 			background: #42567a;
 			transition: all 0.3s ease;
-			// Центрирование точки - объединяем трансформации
 			position: absolute;
 			top: 50%;
 			left: 50%;
 			transform: translate(-50%, -50%);
+
+			@media (max-width: 480px) {
+				width: 5px;
+				height: 5px;
+			}
 		}
 
-		// Неактивные точки (маленькие)
 		&:not(.active) {
 			width: 6px;
 			height: 6px;
 
-			// Стили при наведении на неактивную точку
 			&:hover {
 				background: #f4f5f9 !important;
 				border: 1px solid #929aa9 !important;
@@ -136,46 +279,38 @@
 				height: 40px !important;
 				z-index: 4 !important;
 
-				// Показываем цифру при наведении
 				.timeline-circle__index {
 					display: block !important;
 				}
 
-				// Скрываем точку при наведении
 				.timeline-circle__dot {
 					display: none !important;
 				}
 			}
 		}
 
-		// Активная точка (большая с цифрой)
 		&.active {
 			width: 40px;
 			height: 40px;
 			background: #f4f5f9;
 			color: #42567a;
 			border: 1px solid #929aa9;
-			// // Объединяем scale с translate
 			z-index: 3;
 
-			// Показываем цифру в активной точке
 			.timeline-circle__index {
 				display: block;
 			}
 
-			// Скрываем точку в активной точке
 			.timeline-circle__dot {
 				display: none;
 			}
 
 			&:hover {
-				// Объединяем scale с translate
 				transform: translate(-50%, -50%) scale(1.15);
 			}
 		}
 	}
 
-	// Название активного периода фиксировано справа от круга
 	&__label {
 		position: absolute;
 		left: calc(73% + 20px);
@@ -189,104 +324,33 @@
 		text-align: center;
 		z-index: 10;
 		white-space: nowrap;
-	}
-}
 
-// Адаптивность
-@media (max-width: 1024px) {
-	.timeline-circle {
-		&__left {
-			margin-right: 30px;
-		}
-
-		&__title {
-			font-size: 32px;
+		@media (max-width: 768px) {
+			display: none;
 		}
 	}
-}
 
-@media (max-width: 768px) {
-	.timeline-circle {
-		flex-direction: column;
-		align-items: center;
-		min-height: auto;
+	&__mobile-pagination {
+		display: none;
 
-		&__left {
-			width: 100%;
-			height: auto;
-			margin-right: 0;
-			margin-bottom: 30px;
-			justify-content: center;
-			padding: 0;
-			border: none;
+		@media (max-width: 768px) {
+			display: block;
+			position: fixed;
+			bottom: 20px;
+			left: 0;
+			right: 0;
+			display: flex;
+			justify-content: left;
+			padding: 0 16px;
+			z-index: 1000;
+			background: linear-gradient(transparent, white 30%);
+			padding-top: 40px;
 		}
 
-		&__title {
-			margin-bottom: 20px;
-		}
-
-		&__container {
-			width: 250px;
-			height: 250px;
-			border: none;
-		}
-
-		// Адаптация hover-эффектов для мобильных устройств
-		&__point:not(.active):hover {
-			width: 30px !important;
-			height: 30px !important;
-
-			.timeline-circle__index {
-				font-size: 14px !important;
-			}
-		}
-
-		&__point.active {
-			width: 30px;
-			height: 30px;
-
-			.timeline-circle__index {
-				font-size: 14px;
-			}
-		}
-	}
-}
-
-@media (max-width: 640px) {
-	.timeline-circle {
-		&__title {
-			font-size: 28px;
-		}
-	}
-}
-
-@media (max-width: 480px) {
-	.timeline-circle {
-		&__title {
-			font-size: 24px;
-		}
-
-		&__container {
-			width: 200px;
-			height: 200px;
-		}
-
-		&__point:not(.active):hover {
-			width: 25px !important;
-			height: 25px !important;
-
-			.timeline-circle__index {
-				font-size: 12px !important;
-			}
-		}
-
-		&__point.active {
-			width: 25px;
-			height: 25px;
-
-			.timeline-circle__index {
-				font-size: 12px;
-			}
+		@media (max-width: 480px) {
+			bottom: 15px;
+			padding: 0 12px;
+			padding-top: 30px;
 		}
 	}
 }

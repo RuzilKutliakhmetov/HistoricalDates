@@ -3,16 +3,45 @@
 	display: flex;
 	align-items: center;
 	width: 100%;
-
 	margin: 0 auto;
-	// padding: 0 60px; // Отступы для кнопок навигации
+	padding: 20px 0;
 
-	// Контейнер Swiper
-	.swiper {
-		width: 89%;
+	@media (max-width: 1024px) {
+		padding: 15px 0;
 	}
 
-	// Слайды
+	@media (max-width: 768px) {
+		padding: 10px 0;
+		margin-top: auto;
+		height: 50vh;
+		min-height: 300px;
+		display: flex;
+		flex-direction: column;
+		justify-content: flex-start;
+	}
+
+	.swiper {
+		width: 89%;
+
+		@media (max-width: 1440px) {
+			width: 92%;
+		}
+
+		@media (max-width: 1024px) {
+			width: 95%;
+		}
+
+		@media (max-width: 768px) {
+			width: 100%;
+			padding: 0 16px;
+			height: 100%;
+		}
+
+		@media (max-width: 480px) {
+			padding: 0 12px;
+		}
+	}
+
 	.swiper-slide {
 		height: auto;
 	}
@@ -21,13 +50,18 @@
 		width: 5%;
 		display: flex;
 		justify-content: center;
+
+		@media (max-width: 768px) {
+			display: none; // Скрываем стрелки на мобильных
+		}
+
+		@media (max-width: 480px) {
+			display: none;
+		}
 	}
 
-	// Кнопки навигации
 	&__prev,
 	&__next {
-		// position: absolute;
-		// top: 50%;
 		transform: translateY(-50%);
 		width: 40px;
 		height: 40px;
@@ -35,7 +69,7 @@
 		border: none;
 		border-radius: 50%;
 		background: white;
-		color: #3877EE;
+		color: #3877ee;
 		display: flex;
 		align-items: center;
 		justify-content: center;
@@ -43,8 +77,12 @@
 		transition: all 0.3s ease;
 		z-index: 10;
 
+		@media (max-width: 768px) {
+			display: none;
+		}
+
 		&.disabled {
-			opacity: 0.0;
+			opacity: 0;
 			cursor: auto;
 			border-color: #ccc;
 		}
@@ -55,15 +93,6 @@
 		}
 	}
 
-	&__prev {
-		left: 0;
-	}
-
-	&__next {
-		right: 0;
-	}
-
-	// Стили для события
 	.timeline-event {
 		padding: 24px;
 		height: 100%;
@@ -71,12 +100,43 @@
 		flex-direction: column;
 		transition: transform 0.3s ease, box-shadow 0.3s ease;
 
+		@media (max-width: 1024px) {
+			padding: 20px;
+		}
+
+		@media (max-width: 768px) {
+			padding: 16px;
+			height: 180px;
+			min-height: 180px;
+		}
+
+		@media (max-width: 480px) {
+			padding: 12px;
+			height: 160px;
+			min-height: 160px;
+		}
+
 		&__year {
 			font-size: 25px;
 			line-height: 1.2;
 			font-weight: 600;
 			color: #3877ee;
 			margin-bottom: 15px;
+
+			@media (max-width: 1024px) {
+				font-size: 22px;
+				margin-bottom: 12px;
+			}
+
+			@media (max-width: 768px) {
+				font-size: 18px;
+				margin-bottom: 8px;
+			}
+
+			@media (max-width: 480px) {
+				font-size: 16px;
+				margin-bottom: 6px;
+			}
 		}
 
 		&__description {
@@ -84,121 +144,56 @@
 			color: #42567a;
 			line-height: 30px;
 			flex-grow: 1;
-		}
-	}
 
-	// Адаптивность
-	@media (max-width: 1024px) {
-		padding: 0 50px;
+			@media (max-width: 1024px) {
+				font-size: 18px;
+				line-height: 26px;
+			}
 
-		.timeline-event {
-			padding: 20px;
+			@media (max-width: 768px) {
+				font-size: 14px;
+				line-height: 20px;
+			}
 
-			&__description {
+			@media (max-width: 480px) {
 				font-size: 13px;
-			}
-		}
-	}
-
-	@media (max-width: 768px) {
-		padding: 0 40px;
-
-		&__prev,
-		&__next {
-			width: 36px;
-			height: 36px;
-
-			svg {
-				width: 18px;
-				height: 18px;
-			}
-		}
-
-		.swiper {
-			padding: 15px 5px;
-		}
-
-		.timeline-event {
-			padding: 16px;
-
-			&__year {
-				font-size: 13px;
-				margin-bottom: 8px;
-			}
-
-			&__description {
-				font-size: 12px;
-			}
-		}
-	}
-
-	@media (max-width: 640px) {
-		padding: 0 35px;
-
-		&__prev,
-		&__next {
-			width: 32px;
-			height: 32px;
-
-			svg {
-				width: 16px;
-				height: 16px;
-			}
-		}
-
-		.swiper {
-			padding: 10px 0;
-		}
-
-		.timeline-event {
-			padding: 14px;
-
-			&__year {
-				font-size: 12px;
-			}
-
-			&__description {
-				font-size: 11px;
-			}
-		}
-	}
-
-	@media (max-width: 480px) {
-		padding: 0 30px;
-
-		&__prev,
-		&__next {
-			width: 28px;
-			height: 28px;
-			top: 40%;
-
-			svg {
-				width: 14px;
-				height: 14px;
-			}
-		}
-
-		.timeline-event {
-			padding: 12px;
-
-			&__year {
-				font-size: 11px;
-				margin-bottom: 6px;
-			}
-
-			&__description {
-				font-size: 10px;
+				line-height: 18px;
 			}
 		}
 	}
 }
 
-// Дополнительные стили для Swiper
 .swiper-wrapper {
 	display: flex;
 	align-items: stretch;
+
+	@media (max-width: 768px) {
+		align-items: flex-start;
+	}
 }
 
 .swiper-slide {
 	height: auto;
+
+	@media (max-width: 768px) {
+		height: auto;
+		width: calc(50% - 15px) !important; // 2 элемента в ряд
+		margin-right: 30px !important;
+	}
+
+	@media (max-width: 480px) {
+		width: calc(50% - 10px) !important;
+		margin-right: 20px !important;
+	}
+}
+
+// Стили для Swiper на мобильных
+@media (max-width: 768px) {
+	.swiper {
+		overflow: visible !important;
+	}
+
+	.swiper-wrapper {
+		transform: translate3d(0px, 0, 0) !important;
+	}
 }
