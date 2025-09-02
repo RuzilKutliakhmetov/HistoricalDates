@@ -9,25 +9,32 @@ interface TimelineSliderProps {
 	periods: TimelinePeriod[]
 	activePeriod?: number
 	isMobile?: boolean
+	onSlideChange?: (index: number) => void
+	activeSlideIndex?: number
 }
 
 export const TimelineSlider: React.FC<TimelineSliderProps> = memo(
-	({ periods, activePeriod = 0, isMobile = false }) => {
+	({ periods, activePeriod = 0, isMobile = false, onSlideChange, activeSlideIndex = 0 }) => {
 		const activePeriodData = periods[activePeriod]
 		const swiperRef = useRef<SwiperType | null>(null)
 		const [isBeginning, setIsBeginning] = useState(true)
 		const [isEnd, setIsEnd] = useState(false)
+		const [activeIndex, setActiveIndex] = useState(0)
 
 		const handleSwiperInit = useCallback((swiper: SwiperType) => {
 			swiperRef.current = swiper
 			setIsBeginning(swiper.isBeginning)
 			setIsEnd(swiper.isEnd)
+			setActiveIndex(swiper.activeIndex)
 		}, [])
 
 		const handleSlideChange = useCallback((swiper: SwiperType) => {
 			setIsBeginning(swiper.isBeginning)
 			setIsEnd(swiper.isEnd)
-		}, [])
+			const newIndex = swiper.activeIndex
+			setActiveIndex(newIndex)
+			onSlideChange?.(newIndex)
+		}, [onSlideChange])
 
 		const goNext = useCallback(() => {
 			if (swiperRef.current && !swiperRef.current.isEnd) {
@@ -41,25 +48,37 @@ export const TimelineSlider: React.FC<TimelineSliderProps> = memo(
 			}
 		}, [])
 
+		const goToSlide = useCallback((index: number) => {
+			if (swiperRef.current) {
+				swiperRef.current.slideTo(index)
+			}
+		}, [])
+
+		useEffect(() => {
+			if (swiperRef.current && activeSlideIndex !== activeIndex) {
+				swiperRef.current.slideTo(activeSlideIndex)
+				setActiveIndex(activeSlideIndex)
+			}
+		}, [activeSlideIndex, activeIndex])
+
 		useEffect(() => {
 			if (swiperRef.current) {
 				setIsBeginning(swiperRef.current.isBeginning)
 				setIsEnd(swiperRef.current.isEnd)
+				setActiveIndex(swiperRef.current.activeIndex)
 			}
 		}, [activePeriodData.events])
 
 		return (
 			<div
-				className={`timeline-slider ${
-					isMobile ? 'timeline-slider--mobile' : ''
-				}`}
+				className={`timeline-slider ${isMobile ? 'timeline-slider--mobile' : ''
+					}`}
 			>
 				{!isMobile && (
 					<div className='timeline-slider__button'>
 						<button
-							className={`timeline-slider__prev ${
-								isBeginning ? 'disabled' : ''
-							}`}
+							className={`timeline-slider__prev ${isBeginning ? 'disabled' : ''
+								}`}
 							onClick={goPrev}
 							disabled={isBeginning}
 							aria-label='Предыдущий слайд'

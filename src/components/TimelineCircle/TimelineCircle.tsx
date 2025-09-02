@@ -1,5 +1,5 @@
 import { gsap } from 'gsap'
-import React, { memo, useCallback, useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useCallback, memo, useState } from 'react'
 import { TimelinePeriod } from '../../types/timelines'
 import { TimelineYears } from '../TimelineYears/TimelineYears'
 import { Pagination } from './Pagination/Pagination'
@@ -10,200 +10,109 @@ interface TimelineCircleProps {
 	activePeriod: number
 	onPeriodChange: (index: number) => void
 	isMobile?: boolean
+	onSlideChange?: (index: number) => void
+	activeSlideIndex?: number
 }
 
-export const TimelineCircle: React.FC<TimelineCircleProps> = memo(
-	({ periods, activePeriod, onPeriodChange, isMobile = false }) => {
-		const pointsContainerRef = useRef<HTMLDivElement>(null)
-		const pointRefs = useRef<(HTMLButtonElement | null)[]>([])
-		const labelRef = useRef<HTMLDivElement>(null)
-		const yearsRef = useRef<HTMLDivElement>(null)
+export const TimelineCircle: React.FC<TimelineCircleProps> = memo(({
+	periods,
+	activePeriod,
+	onPeriodChange,
+	isMobile = false,
+	onSlideChange,
+	activeSlideIndex = 0
+}) => {
+	const pointsContainerRef = useRef<HTMLDivElement>(null)
+	const pointRefs = useRef<(HTMLButtonElement | null)[]>([])
+	const labelRef = useRef<HTMLDivElement>(null)
+	const yearsRef = useRef<HTMLDivElement>(null)
+	const [sliderActiveIndex, setSliderActiveIndex] = useState(0)
 
-		const calculateRotation = useCallback(
-			(index: number) => {
-				const totalItems = periods.length
-				const baseAngle = 360 / totalItems
-				return 30 - index * baseAngle
-			},
-			[periods.length]
-		)
+	const calculateRotation = useCallback((index: number) => {
+		const totalItems = periods.length
+		const baseAngle = 360 / totalItems
+		return 30 - index * baseAngle
+	}, [periods.length])
 
-		const handleNext = useCallback(() => {
-			if (activePeriod < periods.length - 1) {
-				onPeriodChange(activePeriod + 1)
+	const handleNext = useCallback(() => {
+		if (activePeriod < periods.length - 1) {
+			onPeriodChange(activePeriod + 1)
+		}
+	}, [activePeriod, periods.length, onPeriodChange])
+
+	const handlePrev = useCallback(() => {
+		if (activePeriod > 0) {
+			onPeriodChange(activePeriod - 1)
+		}
+	}, [activePeriod, onPeriodChange])
+
+	const handlePeriodClick = useCallback((index: number) => {
+		onPeriodChange(index)
+	}, [onPeriodChange])
+
+	const handleSlideChange = useCallback((index: number) => {
+		setSliderActiveIndex(index)
+		onSlideChange?.(index)
+	}, [onSlideChange])
+
+	const goToSlide = useCallback((index: number) => {
+		handleSlideChange(index)
+	}, [handleSlideChange])
+
+	useEffect(() => {
+		if (isMobile) return
+
+		const ctx = gsap.context(() => {
+			if (pointsContainerRef.current) {
+				gsap.to(pointsContainerRef.current, {
+					rotation: calculateRotation(activePeriod),
+					duration: 0.3,
+					ease: 'power2.out',
+				})
 			}
-		}, [activePeriod, periods.length, onPeriodChange])
 
-		const handlePrev = useCallback(() => {
-			if (activePeriod > 0) {
-				onPeriodChange(activePeriod - 1)
+			if (labelRef.current) {
+				gsap.fromTo(
+					labelRef.current,
+					{ opacity: 0, x: 20 },
+					{ opacity: 1, x: 0, duration: 0.3, ease: 'power2.out' }
+				)
 			}
-		}, [activePeriod, onPeriodChange])
 
-		const handlePeriodClick = useCallback(
-			(index: number) => {
-				onPeriodChange(index)
-			},
-			[onPeriodChange]
-		)
+			if (yearsRef.current) {
+				gsap.fromTo(
+					yearsRef.current.children,
+					{ opacity: 0, y: 10 },
+					{ opacity: 1, y: 0, duration: 0.3, stagger: 0.1, ease: 'power2.out' }
+				)
+			}
 
-		useEffect(() => {
-			if (isMobile) return // Отключаем анимации на мобильных
-
-			const ctx = gsap.context(() => {
-				if (pointsContainerRef.current) {
-					gsap.to(pointsContainerRef.current, {
-						rotation: calculateRotation(activePeriod),
+			pointRefs.current.forEach(point => {
+				if (point) {
+					gsap.to(point, {
+						rotation: -calculateRotation(activePeriod),
 						duration: 0.3,
 						ease: 'power2.out',
 					})
 				}
-
-				if (labelRef.current) {
-					gsap.fromTo(
-						labelRef.current,
-						{ opacity: 0, x: 20 },
-						{ opacity: 1, x: 0, duration: 0.3, ease: 'power2.out' }
-					)
-				}
-
-				if (yearsRef.current) {
-					gsap.fromTo(
-						yearsRef.current.children,
-						{ opacity: 0, y: 10 },
-						{
-							opacity: 1,
-							y: 0,
-							duration: 0.3,
-							stagger: 0.1,
-							ease: 'power2.out',
-						}
-					)
-				}
-
-				pointRefs.current.forEach(point => {
-					if (point) {
-						gsap.to(point, {
-							rotation: -calculateRotation(activePeriod),
-							duration: 0.3,
-							ease: 'power2.out',
-						})
-					}
-				})
 			})
+		})
 
-			return () => ctx.revert()
-		}, [activePeriod, calculateRotation, isMobile])
+		return () => ctx.revert()
+	}, [activePeriod, calculateRotation, isMobile])
 
-		return (
-			<div
-				className={`timeline-circle ${
-					isMobile ? 'timeline-circle--mobile' : ''
-				}`}
-			>
-				{isMobile && (
-					<div className='timeline-circle__mobile-header'>
+	return (
+		<div className={`timeline-circle ${isMobile ? 'timeline-circle--mobile' : ''}`}>
+			{isMobile && (
+				<div className="timeline-circle__mobile-header">
+					<div className='timeline-circle__title'>Исторические даты</div>
+				</div>
+			)}
+
+			<div className='timeline-circle__left'>
+				{!isMobile && (
+					<>
 						<div className='timeline-circle__title'>Исторические даты</div>
-					</div>
-				)}
-
-				<div className='timeline-circle__left'>
-					{!isMobile && (
-						<>
-							<div className='timeline-circle__title'>Исторические даты</div>
-							<Pagination
-								current={activePeriod + 1}
-								total={periods.length}
-								onNext={handleNext}
-								onPrev={handlePrev}
-								isFirst={activePeriod === 0}
-								isLast={activePeriod === periods.length - 1}
-							/>
-						</>
-					)}
-				</div>
-
-				<div className='timeline-circle__right'>
-					<div
-						className={`timeline-circle__container ${
-							isMobile ? 'timeline-circle__container--mobile' : ''
-						}`}
-					>
-						{!isMobile && (
-							<svg
-								className='timeline-circle__svg'
-								viewBox='0 0 100 100'
-								aria-hidden='true'
-							>
-								<circle
-									className='timeline-circle__background'
-									cx='50'
-									cy='50'
-									r='50'
-								/>
-							</svg>
-						)}
-
-						<div className='timeline-circle__years'>
-							<TimelineYears
-								periods={periods}
-								activePeriod={activePeriod}
-								ref={yearsRef}
-								isMobile={isMobile}
-							/>
-						</div>
-
-						{!isMobile && (
-							<div
-								ref={pointsContainerRef}
-								className='timeline-circle__points'
-								style={{
-									transform: `rotate(${calculateRotation(activePeriod)}deg)`,
-								}}
-							>
-								{periods.map((period, index) => {
-									const angle = (index * 360) / periods.length
-									const radian = (angle * Math.PI) / 180
-									const x = 50 + 50 * Math.sin(radian)
-									const y = 50 - 50 * Math.cos(radian)
-
-									return (
-										<button
-											key={period.id}
-											ref={el => {
-												pointRefs.current[index] = el
-											}}
-											className={`timeline-circle__point ${
-												index === activePeriod ? 'active' : ''
-											}`}
-											style={{
-												left: `${x}%`,
-												top: `${y}%`,
-											}}
-											onClick={() => handlePeriodClick(index)}
-											aria-label={`Период ${index + 1}: ${period.name}`}
-											aria-current={index === activePeriod ? 'true' : 'false'}
-										>
-											<span className='timeline-circle__dot'></span>
-											<span className='timeline-circle__index'>
-												{index + 1}
-											</span>
-										</button>
-									)
-								})}
-							</div>
-						)}
-
-						{!isMobile && (
-							<div ref={labelRef} className='timeline-circle__label'>
-								{periods[activePeriod]?.name}
-							</div>
-						)}
-					</div>
-				</div>
-
-				{isMobile && (
-					<div className='timeline-circle__mobile-pagination'>
 						<Pagination
 							current={activePeriod + 1}
 							total={periods.length}
@@ -212,11 +121,107 @@ export const TimelineCircle: React.FC<TimelineCircleProps> = memo(
 							isFirst={activePeriod === 0}
 							isLast={activePeriod === periods.length - 1}
 						/>
-					</div>
+					</>
 				)}
 			</div>
-		)
-	}
-)
+
+			<div className='timeline-circle__right'>
+				<div className={`timeline-circle__container ${isMobile ? 'timeline-circle__container--mobile' : ''}`}>
+					{!isMobile && (
+						<svg className='timeline-circle__svg' viewBox='0 0 100 100' aria-hidden="true">
+							<circle
+								className='timeline-circle__background'
+								cx='50'
+								cy='50'
+								r='50'
+							/>
+						</svg>
+					)}
+
+					<div className='timeline-circle__years'>
+						<TimelineYears
+							periods={periods}
+							activePeriod={activePeriod}
+							ref={yearsRef}
+							isMobile={isMobile}
+						/>
+					</div>
+
+					{!isMobile && (
+						<div
+							ref={pointsContainerRef}
+							className='timeline-circle__points'
+							style={{
+								transform: `rotate(${calculateRotation(activePeriod)}deg)`,
+							}}
+						>
+							{periods.map((period, index) => {
+								const angle = (index * 360) / periods.length
+								const radian = (angle * Math.PI) / 180
+								const x = 50 + 50 * Math.sin(radian)
+								const y = 50 - 50 * Math.cos(radian)
+
+								return (
+									<button
+										key={period.id}
+										ref={el => {
+											pointRefs.current[index] = el
+										}}
+										className={`timeline-circle__point ${index === activePeriod ? 'active' : ''
+											}`}
+										style={{
+											left: `${x}%`,
+											top: `${y}%`,
+										}}
+										onClick={() => handlePeriodClick(index)}
+										aria-label={`Период ${index + 1}: ${period.name}`}
+										aria-current={index === activePeriod ? 'true' : 'false'}
+									>
+										<span className='timeline-circle__dot'></span>
+										<span className='timeline-circle__index'>{index + 1}</span>
+									</button>
+								)
+							})}
+						</div>
+					)}
+
+					{!isMobile && (
+						<div ref={labelRef} className='timeline-circle__label'>
+							{periods[activePeriod]?.name}
+						</div>
+					)}
+				</div>
+			</div>
+
+			{isMobile && (
+				<div className="timeline-circle__mobile-pagination">
+					<Pagination
+						current={activePeriod + 1}
+						total={periods.length}
+						onNext={handleNext}
+						onPrev={handlePrev}
+						isFirst={activePeriod === 0}
+						isLast={activePeriod === periods.length - 1}
+					/>
+
+					{periods[activePeriod]?.events.length > 2 && (
+						<div className='timeline-circle__slider-pagination'>
+							<div className='timeline-circle__pagination-dots'>
+								{periods[activePeriod]?.events.slice(0, -1).map((_, index) => (
+									<button
+										key={index}
+										className={`timeline-circle__pagination-dot ${index === activeSlideIndex ? 'active' : ''}`}
+										onClick={() => goToSlide(index)}
+										aria-label={`${index + 1}`}
+									/>
+								))}
+							</div>
+						</div>
+					)}
+				</div>
+			)}
+		</div>
+	)
+})
 
 TimelineCircle.displayName = 'TimelineCircle'

@@ -1,4 +1,4 @@
-import React, { memo, useCallback, useEffect, useRef, useState } from 'react'
+import React, { memo, useRef, useEffect, useState, useCallback } from 'react'
 import { useTimeline } from '../hooks/useTimeline'
 import { TimelinePeriod } from '../types/timelines'
 import './Timeline.scss'
@@ -15,6 +15,7 @@ export const Timeline: React.FC<TimelineProps> = memo(({ periods }) => {
 	const circleRef = useRef<HTMLDivElement>(null)
 	const [axesPosition, setAxesPosition] = useState({ x: 50, y: 50 })
 	const [isMobile, setIsMobile] = useState(false)
+	const [activeSlideIndex, setActiveSlideIndex] = useState(0)
 
 	const checkIsMobile = useCallback(() => {
 		setIsMobile(window.innerWidth <= 768)
@@ -25,18 +26,16 @@ export const Timeline: React.FC<TimelineProps> = memo(({ periods }) => {
 			const containerRect = containerRef.current.getBoundingClientRect()
 			const circleRect = circleRef.current.getBoundingClientRect()
 
-			const circleCenterX =
-				((circleRect.left + circleRect.width / 2 - containerRect.left) /
-					containerRect.width) *
-				100
-			const circleCenterY =
-				((circleRect.top + circleRect.height / 2 - containerRect.top) /
-					containerRect.height) *
-				100
+			const circleCenterX = (circleRect.left + circleRect.width / 2 - containerRect.left) / containerRect.width * 100
+			const circleCenterY = (circleRect.top + circleRect.height / 2 - containerRect.top) / containerRect.height * 100
 
 			setAxesPosition({ x: circleCenterX, y: circleCenterY })
 		}
 	}, [isMobile])
+
+	const handleSlideChange = useCallback((index: number) => {
+		setActiveSlideIndex(index)
+	}, [])
 
 	useEffect(() => {
 		checkIsMobile()
@@ -73,13 +72,13 @@ export const Timeline: React.FC<TimelineProps> = memo(({ periods }) => {
 						viewBox='0 0 100 100'
 						preserveAspectRatio='none'
 						className='timeline__axes-svg'
-						aria-hidden='true'
+						aria-hidden="true"
 					>
 						<line
 							x1='0'
-							y1={axesPosition.y}
+							y1={axesPosition.y + 5}
 							x2='100'
-							y2={axesPosition.y}
+							y2={axesPosition.y + 5}
 							stroke='#d0d5e0'
 							strokeWidth='0.1'
 						/>
@@ -101,7 +100,7 @@ export const Timeline: React.FC<TimelineProps> = memo(({ periods }) => {
 						viewBox='0 0 100 100'
 						preserveAspectRatio='none'
 						className='timeline__axes-svg'
-						aria-hidden='true'
+						aria-hidden="true"
 					>
 						<line
 							x1='0'
@@ -122,6 +121,8 @@ export const Timeline: React.FC<TimelineProps> = memo(({ periods }) => {
 						activePeriod={activePeriod}
 						onPeriodChange={handlePeriodChange}
 						isMobile={isMobile}
+						onSlideChange={handleSlideChange}
+						activeSlideIndex={activeSlideIndex}
 					/>
 				</div>
 
@@ -129,6 +130,8 @@ export const Timeline: React.FC<TimelineProps> = memo(({ periods }) => {
 					periods={periods}
 					activePeriod={activePeriod}
 					isMobile={isMobile}
+					onSlideChange={handleSlideChange}
+					activeSlideIndex={activeSlideIndex}
 				/>
 			</div>
 		</div>

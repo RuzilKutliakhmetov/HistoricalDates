@@ -16,9 +16,8 @@ export const TimelineYears = memo(
 			return (
 				<div
 					ref={ref}
-					className={`timeline-years ${
-						isMobile ? 'timeline-years--mobile' : ''
-					}`}
+					className={`timeline-years ${isMobile ? 'timeline-years--mobile' : ''
+						}`}
 				>
 					<div className='timeline-years__start'>
 						{activePeriodData.startYear}
